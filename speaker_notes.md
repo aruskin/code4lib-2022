@@ -81,7 +81,7 @@ Once we’ve finished processing the survey responses, we can finish populating 
 ## Takeaways
 There are a lot of finer distinctions here, but I think these are the main takeaways on choosing Wikidata vs Wikibase, certainly for how we’ve gone about our projects.
 
-When you work on a project in Wikidata, you become part of this larger community or ecosystem. The edits you make can impact (for better or worse) all of these services that pull information from Wikidata. People might come in and (for better or worse) edit items you’ve created. There’s all of this existing work–the 97 million items, the various community efforts at coming up with standards for different domains–that you can build off of and add to. 
+When you work on a project in Wikidata, you become part of this larger community or ecosystem. The edits you make can impact (for better or worse) all of these services that pull information from Wikidata. People might come in and (for better or worse) edit items you’ve created.[^7] There’s all of this existing work–the 97 million items, the various community efforts at coming up with standards for different domains–that you can build off of and add to. 
 
 Which isn’t to say that custom Wikibases can’t also be community-oriented–you can open your Wikibase up to allow anyone to edit, but you don’t have to.
 
@@ -105,3 +105,6 @@ Essentially, a custom Wikibase gives you more control over various aspects of th
 [^5]: For example, the [Wikibase Data Model Primer](https://www.mediawiki.org/wiki/Wikibase/DataModel/Primer) on MediaWiki
 
 [^6]: See: [Chinatown Collections Survey post on the BRC blog](https://bostonresearchcenter.org/bringing-history-together-the-chinatown-collections-survey-project/) and/or the [Chinatown Collections Survey post on the BPL blog](https://www.bpl.org/blogs/post/bringing-history-together-a-chinatown-collections-survey-project/)
+
+[^7]: Somewhat related, and an interesting read: 
+ > Charles Chuankai Zhang, Mo Houtti, C. Estelle Smith, Ruoyan Kong, and Loren Terveen. 2022. Working for the Invisible Machines or Pumping Information into an Empty Void? An Exploration of Wikidata Contributors’ Motivations. _Proc. ACM Hum.-Comput. Interact._ 6, CSCW1, Article 135 (April 2022), 21 pages. https://doi.org/10.1145/3512982
