@@ -107,4 +107,5 @@ Essentially, a custom Wikibase gives you more control over various aspects of th
 [^6]: See: [Chinatown Collections Survey post on the BRC blog](https://bostonresearchcenter.org/bringing-history-together-the-chinatown-collections-survey-project/) and/or the [Chinatown Collections Survey post on the BPL blog](https://www.bpl.org/blogs/post/bringing-history-together-a-chinatown-collections-survey-project/)
 
 [^7]: Somewhat related, and an interesting read: 
- > Charles Chuankai Zhang, Mo Houtti, C. Estelle Smith, Ruoyan Kong, and Loren Terveen. 2022. Working for the Invisible Machines or Pumping Information into an Empty Void? An Exploration of Wikidata Contributors’ Motivations. _Proc. ACM Hum.-Comput. Interact._ 6, CSCW1, Article 135 (April 2022), 21 pages. https://doi.org/10.1145/3512982
+
+    Charles Chuankai Zhang, Mo Houtti, C. Estelle Smith, Ruoyan Kong, and Loren Terveen. 2022. Working for the Invisible Machines or Pumping Information into an Empty Void? An Exploration of Wikidata Contributors’ Motivations. _Proc. ACM Hum.-Comput. Interact._ 6, CSCW1, Article 135 (April 2022), 21 pages. https://doi.org/10.1145/3512982
