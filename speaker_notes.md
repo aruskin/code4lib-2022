@@ -2,18 +2,6 @@
 
 ## Introduction
 
-### What is Wikidata? What is Wikibase?
-
-For those who aren’t familiar, [Wikidata](https://www.wikidata.org/wiki/Wikidata:Main_Page) is a free, collaborative knowledge base under the Wikimedia umbrella. It currently (as of 2022-04-26) has over 97 million items, representing both concrete real-world entities and abstract concepts. Anyone can view or edit this data.[^1]
-
-[Wikibase](https://wikiba.se/) is the underlying software suite; it was originally written for Wikidata, and Wikidata is probably the most famous and widely used instance of Wikibase.[^2] But you can also set up your own Wikibase and populate it however you want.[^3] So when I refer to Wikibase in this talk, I’ll mostly be using that as shorthand for custom, non-Wikidata instances of Wikibase.
-
-### Wikibase data model
-We don’t really have time to get deep into the Wikibase data model in this presentation; there are other great resources out there, if you’re interested.[^5]
-
-To give you a sense of what data looks like in Wikibase, here is [the Wikidata item](https://www.wikidata.org/wiki/Q85783364) representing the Make Way for Duckings sculpture in Boston Common. You can see that it has a unique identifier (the Q number at the top), multilingual labels, descriptions, and aliases, and a bunch of statements representing facts about the sculpture. Those statements are made up of Properties (e.g., [instance of](https://www.wikidata.org/wiki/Property:P31), [image](https://www.wikidata.org/wiki/Property:P18), [inception](https://www.wikidata.org/wiki/Property:P571)) that would be defined similarly--that is, via multilingual labels, descriptions, and aliases and statements--and values that can take on [different types](https://www.wikidata.org/wiki/Help:Data_type) (e.g., other items, points in time, files on Wikimedia Commons).
-
-
 ### Boston Research Center
 The two projects I’m going to discuss are for the [Boston Research Center](https://bostonresearchcenter.org/) (BRC), which is a digital community history and archives lab based in the Northeastern University Library. The BRC is focused on building collections and partnerships with Boston-area social justice organizations; right now, we’re working on projects based in the Boston neighborhoods of Chinatown, Roxbury, East Boston, and the South End. 
 
@@ -44,14 +32,24 @@ In addition, there were already some [established community practices](https://w
 
 We’ve already added or modified Wikidata items for [over 200 works of art](https://www.wikidata.org/wiki/Wikidata:WikiProject_Neighborhood_Public_Art_in_Boston/List_of_works) and [over 100 artists](https://www.wikidata.org/wiki/Wikidata:WikiProject_Neighborhood_Public_Art_in_Boston/List_of_artists). Some of these were bulk uploaded from spreadsheets via OpenRefine, some of these were manual edits. We’ve created a [WikiProject page](https://www.wikidata.org/wiki/Wikidata:WikiProject_Neighborhood_Public_Art_in_Boston) to document this work; this includes our data models, example queries, and lists of research resources. We're hoping this can be a useful reference for people to participate in this project as well as anyone interested in starting similar projects. We’ve hosted two little edit-a-thons so far.
 
-Looking ahead, we’re going to be working on custom visualizations using this data. We also have a number of photos of these works from the Boston Public Library that we’re going to ingest into our institutional repository, and we want to connect those to the relevant items somehow (unfortunately, US copyright laws mean we can’t put most of them in Wikimedia Commons). And finally, more edit-a-thons and classroom activities around this material.
+We've had a student working on building a custom map visualization using this data, which has more functionality than the built-in map visualization that comes with the Wikidata Query Service: https://dsgsites.neu.edu/brcdemo/
+
+(Still need to do a bit more work to have this draw directly from thhe Wikidata SPARQL endpoint, rather than querying that, saving the data as a JSON file, and sending it over)
+
+We have a number of photos of these works from the Boston Public Library that we’ve cataloged and ingested into our institutional repository (unfortunately, US copyright laws mean we can’t put most of them in Wikimedia Commons); we've included the Wikidata URI in the metadata for photos of works with corresponding Wikidata items, and we intend to add the URLs of the photos to the Wikidata items (using the non-free artwork image URL property). 
+
+(Future development work to make better use of these relationships as well)
+
+Set up a Wordpress site to highlight this work--custom map, additional visualizations from WDQS, gallery of photos, etc. Will hopefully curate themed exhibits/add more narrative content here.
+
+Finally, more edit-a-thons and classroom activities around this material.
 
 ## Wikibase: Chinatown Collections Survey
 
 ### Background and goals
-The BRC initially met with community organizations around Boston’s Chinatown, asking about what sort of digital history projects would be useful to them. It turned out that lots of oral histories and other projects were already happening in that community and they didn’t need Northeastern’s help in facilitating those. What we could help with was creating a directory of all those projects. 
+In the spring of 2021, the BRC  met with community organizations around Boston’s Chinatown, asking about what sort of digital history projects would be useful to them. It turned out that lots of oral histories and other projects were already happening in that community and they didn’t need Northeastern’s help in facilitating those. What we could help with was creating a directory of all those projects. 
 
-So, in collaboration with the Boston Public Library, we sent out a survey (with versions in English and simplified and traditional Chinese) to people and organizations around Boston asking them to tell us about any materials they have related to Boston’s Chinatown.[^6]
+So, in collaboration with the Boston Public Library, we sent out a survey (with versions in English and simplified and traditional Chinese) to people and organizations around Boston asking them to tell us about any materials they have related to Boston’s Chinatown.
 
 The eventual goal is then to structure and translate the free-text responses from that survey more to create a searchable and browsable multilingual directory of collections.
 
@@ -73,10 +71,58 @@ Not all of the items we’re creating would be appropriate for inclusion in Wiki
 
 And while this is maybe not the best reason to adopt a technology–there has been some discussion/interest in using Wikibase more broadly in the library, and this seemed like a good pilot project.
 
-### Project status
-Right now, we’re still processing and following up on survey responses. We do have an instance of the Wikibase Suite deployed on AWS. We’ve started populating it--this has meant copying over labels, descriptions, and aliases of a handful of items and properties from Wikidata, so that we can reuse the sort of language work done there, as well as creating new items and properties for local use.
+### Implementation
 
-Once we’ve finished processing the survey responses, we can finish populating the Wikibase and get someone in to translate the content. And then the major work of building an interface to display all this information in a more user-friendly way and set up better searching and browsing capabilities.
+#### Boston Chinatown Collections survey
+
+BRC team worked to:
+
+- Develop survey
+- Review survey with partners
+- Translate survey (have simplified and traditional Chinese versions)[^6]
+- Publicize survey (blog posts on BPL and BRC websites, idk where else)
+- Gather initial responses in spreadsheet
+- Reinvite non-respondents
+- Update community partners
+- Republicize via community partners
+
+Other things to note about survey: all free-text entry, some survey responses related to multiple collections.
+
+#### Data models and controlled vocabularies
+
+Figuring out the key entities, fields, and relationships we want to capture and present to users, based on the results of the Chinatown Collection survey. 
+
+Identifying any controlled vocabularies that we need to select from existing sources or develop ourselves. 
+
+Iterative process: modify/refine as user needs become clearer and we assess difficulty of coding responses.
+
+Ultimately established data models for representing collections, organizations, and people in a structured way that would allow us to create a searchable and browsable directory of collections. In coming up with our data models and controlled vocabularies, we looked at similar projects, such as COURAGE, and consulted with archivists.
+
+#### Coding survey responses
+
+BRC staff parsed and coded the initial survey responses according to these data models, following up with respondents to get additional information about their collections where necessary. Once the coding process was completed in English, we hired a translator to translate the relevant text into simplified Chinese.
+
+Used Airtable as staging area for this process.
+
+#### Installing instance of Wikibase suite
+
+Contact Rob Chavez for more details there
+
+#### Loading data into Wikibase
+
+Copying labels/descriptions/aliases for items and properties from Wikidata
+
+Automated vs manual aspects of this process
+
+#### Building front-end
+
+The web interface for the project currently uses Snowman, a static site generator for SPARQL backends.
+
+### Future work
+
+- Develop Wordpress plug-in to interact with Wikibase, replace Snowman site
+- Add support for traditional Chinese
+- Add more types of entities (e.g., events)
 
 ## Takeaways
 There are a lot of finer distinctions here, but I think these are the main takeaways on choosing Wikidata vs Wikibase, certainly for how we’ve gone about our projects.
@@ -93,12 +139,6 @@ Essentially, a custom Wikibase gives you more control over various aspects of th
 - You can control who views your Wikibase, and thus what sort of external applications might access the data stored there.
 
 ---
-
-[^1]: See also: the [Wikidata Introduction page](https://www.wikidata.org/wiki/Wikidata:Introduction) on Wikidata
-
-[^2]: See also: the [Wikibase FAQ](https://www.mediawiki.org/wiki/Wikibase/FAQ) on MediaWiki
-
-[^3]: Some cool examples of custom Wikibases in the wild: [Enslaved.org](https://lod.enslaved.org/wiki/Meta:Main_Page), [Rhizome Artbase](https://artbase.rhizome.org/wiki/Main_Page), [Semantic Lab at Pratt](http://base.semlab.io/wiki/Main_Page)
 
 [^4]: For example, we may want to keep track of the contact information for the archivists who responded to the survey, so that we can ask them for more details about their collections down the line, but they are not public figures and may not want to have associated Wikidata items.
 
