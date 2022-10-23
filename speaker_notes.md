@@ -47,13 +47,40 @@ Finally, more edit-a-thons and classroom activities around this material.
 ## Wikibase: Chinatown Collections Survey
 
 ### Background and goals
-In the spring of 2021, the BRC  met with community organizations around Boston’s Chinatown, asking about what sort of digital history projects would be useful to them. It turned out that lots of oral histories and other projects were already happening in that community and they didn’t need Northeastern’s help in facilitating those. What we could help with was creating a directory of all those projects. 
+In the spring of 2021, the BRC met with community organizations around Boston’s Chinatown, asking about what sort of digital history projects would be useful to them. It turned out that lots of oral histories and other projects were already happening in that community and they didn’t need Northeastern’s help in facilitating those. What we could help with was creating a directory of all those projects, to serve as a launching point for neighborhood research.
 
-So, in collaboration with the Boston Public Library, we sent out a survey (with versions in English and simplified and traditional Chinese) to people and organizations around Boston asking them to tell us about any materials they have related to Boston’s Chinatown.
+### Boston Chinatown Collections Survey
 
-The eventual goal is then to structure and translate the free-text responses from that survey more to create a searchable and browsable multilingual directory of collections.
+So as a first step, the BRC team worked to develop a survey to find out about what sort of materials various people and organizations around Boston may have relating to Chinatown. The eventual goal is then to structure and translate the free-text responses from that survey to create a searchable and browsable multilingual directory of collections.
 
-### Database needs
+We reviewed the survey with our community partners, had it translated into simplified and traditional Chinese,[^6] and publicized it via blog posts on the Boston Public Library and Boston Research Center websites (maybe elsewhere too--reaching out to individuals and orgs?). The initial responses were gathered into a spreadsheet. We then reinvited non-respondents to take the survey, updated our community partners on what we'd received so far, and republicized the survey via the community partners.
+
+You can see screenshots of the English-language survey here; note that it's all free-text entry. Some respondents, such as the representative for the Chinese Historical Society of New England (CHSNE), mentioned multiple collections in their responses. 
+
+### Data models and controlled vocabularies
+
+The next step was to figure out the key entities, fields, and relationships we want to capture and present, based on the results of the Chinatown Collections Survey and our understanding of potential user needs. For this initial version, we decided that the collections and the organizations and people linked to them were the most important entities to represent.
+
+Collections are defined pretty broadly here--many of these are archival collections held at universities, but we are also including Wordpress blogs, art installations, personal collections, etc. Archival "collections" may be entire fonds, series, or files with specific relevance to Boston's Chinatown, as well as fonds, series, or files that happen to include materials related to Boston's Chinatown. So we wanted the collections data model to be general enough to cover all of those, but still be in line with how, for example, archival collections are described elsewhere. 
+
+For organizations and people, there are already so many existing models and ontologies to draw from that there's really no need to reinvent the wheel. Some things we're mindful of, however:
+- For community organizations that might not have a huge online presence, it probably is our role to become a reliable source of information and to preserve the history of the organization. 
+- Not all of the people linked to collections (e.g., as donors or maintainers) are public figures, so we need to be careful about how much information about them we gather and store 
+
+Part of this process also involved identifying any controlled vocabularies that we would need to select from existing sources or develop ourselves. And this was all iterative; we started modeling with the intention of modifying/refining our models as user needs become clearer and we assess difficulty of coding responses. In coming up with our data models and controlled vocabularies, we also looked at similar projects, such as [COURAGE](http://cultural-opposition.eu/), which is a database of collections in Europe dealing with cultural opposition in the former socialist countries, and consulted with Northeastern's archivists (asking if data models seem reasonable based on their expertise).
+
+### Coding survey responses
+
+BRC staff parsed and coded the initial survey responses according to these data models, following up with respondents to get additional information about their collections where necessary. 
+
+We used an Airtable base for this process. This serves as a staging area before the data can be uploaded into the final database.
+
+Once the coding process was completed in English, we hired a translator to translate the relevant text into simplified Chinese.
+
+### Choosing to use Wikibase
+
+#### Database needs
+
 This is not very much data, but there are a few specific needs that mean we probably want to go beyond spreadsheets in handling it.
 
 The ultimate interface will need to be multilingual, so that means we want to be able to store field names and values in English and Chinese in the database.
@@ -62,7 +89,7 @@ We’re also trying to represent multiple types of entities and the different ty
 
 In addition, it would be nice to have something lightweight and easy to implement (again, this is not Big Data), a user friendly editing interface that we don’t have to build ourselves, and enough flexibility in the schema (or no schema) to expand the project scope down the line and deal with idiosyncratic entities. That last point is key: we’re defining “collection” really broadly here, so we’re not just capturing information about formal archival collections but also art installations, blogs, personal collections…
 
-### Why Wikibase?
+#### Why Wikibase?
 Wikibase--and by extension Wikidata--fits a lot of those needs; in particular, the way that multilingual labels, descriptions, and aliases are handled for both Items and Properties is one of the major reasons we’re going with it. 
 
 But there are reasons why a custom Wikibase is a better fit than Wikidata for this particular project.
@@ -71,52 +98,35 @@ Not all of the items we’re creating would be appropriate for inclusion in Wiki
 
 And while this is maybe not the best reason to adopt a technology–there has been some discussion/interest in using Wikibase more broadly in the library, and this seemed like a good pilot project.
 
-### Implementation
+### Installing instance of Wikibase suite
 
-#### Boston Chinatown Collections survey
+We have the full Wikibase suite deployed in an EC2 instance on AWS with Docker. Getting this set up wasn't totally starightforward; there were a lot of kinks to work out and not much documentation to work from, in terms of diagnosing and resolving issues with the Wikibase installation (also, so many moving parts--difficult to source and isolate issues).
 
-BRC team worked to:
+Contact [Rob Chavez](https://library.northeastern.edu/about/library-staff-directory/robert-chavez), the Senior Digital Scholarship Group Developer, for more details about this process.
 
-- Develop survey
-- Review survey with partners
-- Translate survey (have simplified and traditional Chinese versions)[^6]
-- Publicize survey (blog posts on BPL and BRC websites, idk where else)
-- Gather initial responses in spreadsheet
-- Reinvite non-respondents
-- Update community partners
-- Republicize via community partners
+Still have more customization to do here--e.g., adding logo, making sure statements appear in a particular order on item pages, setting the formatURI property so identifiers show up as URIs, etc.
 
-Other things to note about survey: all free-text entry, some survey responses related to multiple collections.
+### Loading data into Wikibase
 
-#### Data models and controlled vocabularies
+Once we had the Wikibase suite installed, we started loading in the properties and items required for the data models. So not any of the collections, organizations, and people just yet, but the properties representing the fields in the data models and items for terms in controlled vocabularies. As much as possible, we tried to find corresponding items and properties in Wikidata for the items and properties used in our data models (and this was part of the consideration in the initial design of the data models). We wrote a Python script to copy labels, descriptions, and aliases for entities from Wikidata to our Wikibase (makes use of the Wikimedia API--need bot credentials for the target Wikibase, but not the source) and to store the original Wikidata PID/QID associated with the entity in a "corresponding Wikidata property" or "corresponding Wikidata item" statement. (Since we also wanted to use some custom properties, it didn't make sense to use federated properties here, based on our understanding of how that's currently implemented).
 
-Figuring out the key entities, fields, and relationships we want to capture and present to users, based on the results of the Chinatown Collection survey. 
+We also had a script to bulk create items and properties from a CSV file with monolingual labels and descriptions. (We couldn't initially get QuickStatements working, which was part of the reason for doing this via custom Python scripts.)
 
-Identifying any controlled vocabularies that we need to select from existing sources or develop ourselves. 
+The remaining editing work was mostly manual--adding statements to items, copying in the Chinese text we got back from the translator. This was such a small amount of data that it seemed easier to add it in this way than to figure out QuickStatements/write more scripts, but a larger project should probably use a more systematic approach.
 
-Iterative process: modify/refine as user needs become clearer and we assess difficulty of coding responses.
+### Building front-end
 
-Ultimately established data models for representing collections, organizations, and people in a structured way that would allow us to create a searchable and browsable directory of collections. In coming up with our data models and controlled vocabularies, we looked at similar projects, such as COURAGE, and consulted with archivists.
+Finally, we developed a website that pulls in data from the Wikibase, in order to present it in a more user-friendly manner and allow users to navigate the data without having to write SPARQL queries.
 
-#### Coding survey responses
+The web interface for the project currently uses Snowman, a static site generator for SPARQL backends. This was plan B, after our initial development plan fell through, so we haven't explored the potential functionality there super thoroughly just yet. But what we have now allows the user to:
 
-BRC staff parsed and coded the initial survey responses according to these data models, following up with respondents to get additional information about their collections where necessary. Once the coding process was completed in English, we hired a translator to translate the relevant text into simplified Chinese.
+- See the full lists of collections, organizations, and people in the Wikibase
+- View an individual entity and the information we have about it, organized more logically than it would be in the Wikibase user interface
+- Browse collections organized by various categories (maintainers, subject terms, material types)
+- (Read contextual narrative text for all of that)
+- (Switch between English and simplified Chinese for all of that)
 
-Used Airtable as staging area for this process.
-
-#### Installing instance of Wikibase suite
-
-Contact Rob Chavez for more details there
-
-#### Loading data into Wikibase
-
-Copying labels/descriptions/aliases for items and properties from Wikidata
-
-Automated vs manual aspects of this process
-
-#### Building front-end
-
-The web interface for the project currently uses Snowman, a static site generator for SPARQL backends.
+Which is basically what we were trying to do--ideally, we'd have an interface for searching over all of the entities with faceted browsing, but this is still probably a more useful interface for our intended users than the barebones Wikibase UI.
 
 ### Future work
 
